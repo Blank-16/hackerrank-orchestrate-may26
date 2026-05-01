@@ -6,12 +6,11 @@ from agent import SupportAgent
 def main():
     load_dotenv()
     
-    # Initialize the agent
     agent = SupportAgent()
     
-    # Load support tickets
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     tickets_path = os.path.join(base_dir, "support_tickets", "support_tickets.csv")
+    
     if not os.path.exists(tickets_path):
         print(f"File not found: {tickets_path}")
         return
@@ -21,17 +20,15 @@ def main():
     
     results = []
     
-    # Process each ticket
     for idx, row in df.iterrows():
         issue = str(row.get("Issue", "")) if pd.notna(row.get("Issue")) else ""
         subject = str(row.get("Subject", "")) if pd.notna(row.get("Subject")) else ""
         company = str(row.get("Company", "")) if pd.notna(row.get("Company")) else ""
         
-        print(f"Processing ticket {idx+1}/{len(df)}: {subject} ({company})")
+        print(f"\nProcessing ticket {idx+1}/{len(df)}: {subject} ({company})")
         
         prediction = agent.process_ticket(issue, subject, company)
         
-        # Combine the original row with our predictions
         result_row = row.copy()
         result_row["Status"] = prediction.get("status", "escalated")
         result_row["Product Area"] = prediction.get("product_area", "unknown")
@@ -40,12 +37,12 @@ def main():
         result_row["Request Type"] = prediction.get("request_type", "invalid")
         
         results.append(result_row)
+        print(f"  -> Decision: {result_row['Status']}")
         
-    # Save the output
     output_df = pd.DataFrame(results)
     output_path = os.path.join(base_dir, "support_tickets", "output.csv")
     output_df.to_csv(output_path, index=False)
-    print(f"Saved results to {output_path}")
+    print(f"\nSaved final results to {output_path}")
 
 if __name__ == "__main__":
     main()

@@ -8,6 +8,7 @@
 node_modules/
 .pnpm-store/
 .venv/
+.venv_gpu/
 venv/
 __pycache__/
 *.pyc
@@ -31,3 +32,11 @@ data/index/
 data/embeddings/
 *.sqlite
 *.db
+
+# Local python install and archives
+python312_local/
+python.zip
+code.zip
+code_advanced.zip
+support_tickets/output.csv
+support_tickets/advanced_output.csv

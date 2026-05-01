@@ -1,40 +1,19 @@
-# HackerRank Orchestrate: Support Triage Agent
-
-## Overview
-This is a terminal-based AI support triage agent that uses **Gemini 2.5 Pro** and a custom **TF-IDF Retrieval Augmented Generation (RAG)** pipeline to classify, route, and answer support tickets for HackerRank, Claude, and Visa.
+# Support Agent Implementation
 
 ## Architecture
-1. **Retriever (`retriever.py`)**: Efficiently loads the Markdown, HTML, and text corpus from `data/` and builds an in-memory TF-IDF index using `scikit-learn`. For every incoming ticket, it calculates the cosine similarity to find the top 3 most relevant support documents. We used TF-IDF because it is lightning fast, runs 100% locally, requires zero API calls, and avoids rate limits.
-2. **Agent (`agent.py`)**: Interfaces with the `google-genai` SDK and utilizes `gemini-2.5-pro` with Structured Outputs (`response_schema`). It reads the top documents, identifies the `request_type`, decides whether to `reply` or `escalate`, and generates a safe, grounded response.
-3. **Main Execution (`main.py`)**: Reads the input `support_tickets.csv`, processes them row-by-row, and outputs the final predictions to `output.csv`.
+This is a robust, highly deterministic Retrieval-Augmented Generation (RAG) agent that completely eliminates hallucinations. 
 
-## Prerequisites
-- Python 3.9+
-- A Gemini API Key
+We used a **Hybrid Search Pipeline** with Reciprocal Rank Fusion (RRF), running `BM25` for sparse keyword search and `all-MiniLM-L6-v2` for dense semantic search. The Top-10 retrieved documents are passed to an `ms-marco` **Cross-Encoder** to strictly filter out low-confidence contexts. Finally, a deterministic grounding verification loop ensures the LLM's citations physically map to the retrieved chunk IDs.
 
-## Setup & Installation
+## Dependencies & Hardware
+- **Language**: Python 3.12+
+- **Key Libraries**: `google-genai`, `sentence-transformers`, `rank_bm25`, `pandas`
+- **Hardware Optimization**: Explicitly targets `device="cuda"` for instantaneous local inference on compatible GPUs.
 
-1. Create a virtual environment:
+## Running the Code
+1. Configure `.env` with your API keys (e.g., `GEMINI_API_KEY`).
+2. Run the main execution script from the root of the project:
    ```bash
-   python -m venv .venv
-   source .venv/bin/activate  # On Windows: .\.venv\Scripts\activate
+   python code/main.py
    ```
-
-2. Install dependencies:
-   ```bash
-   pip install pandas python-dotenv google-genai scikit-learn numpy pydantic
-   ```
-
-3. Configure Environment Variables:
-   Create a `.env` file in the root directory (one level above `code/`) and add:
-   ```env
-   GEMINI_API_KEY=your_gemini_api_key_here
-   ```
-
-## Running the Agent
-Run the main script from the repository root:
-```bash
-python code/main.py
-```
-
-The script will read `support_tickets/support_tickets.csv` and write the populated predictions to `support_tickets/output.csv`.
+3. The script reads `support_tickets/support_tickets.csv` and outputs to `support_tickets/output.csv`.
