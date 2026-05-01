@@ -3,7 +3,7 @@
 ## Architecture
 This is a robust, highly deterministic Retrieval-Augmented Generation (RAG) agent that completely eliminates hallucinations. 
 
-We used a **Hybrid Search Pipeline** with Reciprocal Rank Fusion (RRF), running `BM25` for sparse keyword search and `all-MiniLM-L6-v2` for dense semantic search. The Top-10 retrieved documents are passed to an `ms-marco` **Cross-Encoder** to strictly filter out low-confidence contexts. Finally, a deterministic grounding verification loop ensures the LLM's citations physically map to the retrieved chunk IDs.
+I used a **Hybrid Search Pipeline** with Reciprocal Rank Fusion (RRF), running `BM25` for sparse keyword search and `all-MiniLM-L6-v2` for dense semantic search. The Top-10 retrieved documents are passed to an `ms-marco` **Cross-Encoder** to strictly filter out low-confidence contexts. Finally, a deterministic grounding verification loop ensures the LLM's citations physically map to the retrieved chunk IDs.
 
 ## Dependencies & Hardware
 - **Language**: Python 3.12+
