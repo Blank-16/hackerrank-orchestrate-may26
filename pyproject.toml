@@ -1,0 +1,29 @@
+[project]
+name = "hackerrank-orchestrate-support-agent"
+version = "1.0.0"
+description = "A production-grade, deterministic RAG support triage agent."
+readme = "code/README.md"
+requires-python = ">=3.11, <3.14"
+
+dependencies = [
+    "pandas>=2.0.0",
+    "google-genai>=0.5.0",
+    "rank_bm25>=0.2.2",
+    "sentence-transformers>=2.5.0",
+    "scikit-learn>=1.4.0",
+    "torch>=2.2.0",
+    "torchvision>=0.17.0",
+    "torchaudio>=2.2.0",
+    "python-dotenv>=1.0.0",
+    "pydantic>=2.6.0"
+]
+
+[tool.uv]
+extra-index-url = ["https://download.pytorch.org/whl/cu121"]
+
+[project.scripts]
+main = "code.main:main"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"

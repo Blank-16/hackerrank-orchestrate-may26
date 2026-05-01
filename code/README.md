@@ -12,8 +12,18 @@ I used a **Hybrid Search Pipeline** with Reciprocal Rank Fusion (RRF), running `
 
 ## Running the Code
 1. Configure `.env` with your API keys (e.g., `GEMINI_API_KEY`).
-2. Run the main execution script from the root of the project:
-   ```bash
-   python code/main.py
-   ```
+2. Run the main execution script from the root of the project.
+
+### Standard Python
+```bash
+pip install -r requirements.txt # (or install from pyproject.toml)
+python code/main.py
+```
+
+### With `uv` (Recommended)
+Because this project includes a standard `pyproject.toml` with the PyTorch CUDA index, you can run it instantly without manual environment management:
+```bash
+uv run main
+```
+
 3. The script reads `support_tickets/support_tickets.csv` and outputs to `support_tickets/output.csv`.
